@@ -32,8 +32,9 @@ function Send-SlackChannelInvite {
         Slack
     #>
 
+    [cmdletbinding()]
     param (
-        [string]$Token = $Script:PSSlack.Token,
+        $Token = $Script:PSSlack.Token,
         [string]$Channel,
         [string[]]$User,
         [switch]$ForceVerbose = $Script:PSSlack.ForceVerbose
@@ -43,8 +44,11 @@ function Send-SlackChannelInvite {
         $body = @{}
         switch ($psboundparameters.keys) {
             'Channel'     { $body.channel = $Channel }
-            'User'        { $body.users = $User }
+            'User'        { $body.users = ($User -join ",") }
         }
+    }
+    end
+    {
         Write-Verbose "Send-SlackApi -Body $($body | Format-List | Out-String)"
         $Params = @{
             Method = 'conversations.invite'
