@@ -117,8 +117,10 @@ function Remove-SlackMessage {
         # Get generic for a brief moment so we can use one loop for all three cases.
         foreach ($item in $PrimaryIterator) {
             $Body = @{
-                as_user = $AsUser
                 channel = $ChannelID
+            }
+            if ($AsUser) {
+                $Body.as_user = $AsUser
             }
             switch ($PSCmdlet.ParameterSetName) {
                 "ByParameter" {
